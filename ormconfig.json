@@ -1,10 +1,10 @@
 {
    "type": "mysql",
-   "host": "localhost",
+   "host": "us-cdbr-east-03.cleardb.com",
    "port": 3306,
-   "username": "root",
-   "password": "SQL243qlqjs@!",
-   "database": "typeorm",
+   "username": "b54c4065fa9513",
+   "password": "5f20918c",
+   "database": "heroku_f356c617325b1c0",
    "synchronize": true,
    "logging": true,
    "entities": [
