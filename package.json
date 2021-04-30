@@ -9,7 +9,6 @@
    },
    "author": "",
    "license": "ISC",
-   "type": "module",
    "dependencies": {
       "@types/bcrypt": "^3.0.1",
       "@types/dotenv": "^8.2.0",
