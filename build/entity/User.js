@@ -34,23 +34,42 @@ var User = /** @class */ (function (_super) {
     }
     User.findById = function (id) {
         return this.createQueryBuilder("user")
-            .where("user.id = :id", { id: id })
-            .getMany();
+            .where("user.Id = :id", { id: id })
+            .getOne();
+    };
+    User.findByEmail = function (email) {
+        return this.createQueryBuilder("user")
+            .where("user.Email = :email", { email: email })
+            .getOne();
     };
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
-    ], User.prototype, "id", void 0);
+    ], User.prototype, "Id", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], User.prototype, "name", void 0);
+    ], User.prototype, "Name", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], User.prototype, "number", void 0);
+    ], User.prototype, "Nick", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return Post_1.Post; }, function (post) { return post.userId; }),
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], User.prototype, "Email", void 0);
+    __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], User.prototype, "Password", void 0);
+    __decorate([
+        typeorm_1.Column({
+            nullable: true,
+        }),
+        __metadata("design:type", String)
+    ], User.prototype, "ImagePath", void 0);
+    __decorate([
+        typeorm_1.OneToMany(function () { return Post_1.Post; }, function (post) { return post.userId; }),
         __metadata("design:type", Array)
     ], User.prototype, "post", void 0);
     User = __decorate([

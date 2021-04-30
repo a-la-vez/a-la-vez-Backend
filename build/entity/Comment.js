@@ -47,13 +47,15 @@ var Comment = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], Comment.prototype, "Content", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return User_1.User; }, function (userId) { return userId.id; }),
+        typeorm_1.ManyToOne(function () { return User_1.User; }, function (user) { return user.Id; }),
+        typeorm_1.JoinColumn({ name: 'user_id' }),
         __metadata("design:type", User_1.User)
     ], Comment.prototype, "userId", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return Post_1.Post; }, function (postId) { return postId.Id; }),
+        typeorm_1.ManyToOne(function () { return Post_1.Post; }, function (post) { return post.Id; }),
+        typeorm_1.JoinColumn({ name: 'post_id' }),
         __metadata("design:type", Post_1.Post)
-    ], Comment.prototype, "uPostId", void 0);
+    ], Comment.prototype, "PostId", void 0);
     __decorate([
         typeorm_1.CreateDateColumn(),
         __metadata("design:type", Date)

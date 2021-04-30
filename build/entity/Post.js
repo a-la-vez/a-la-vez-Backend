@@ -34,13 +34,24 @@ var Post = /** @class */ (function (_super) {
     }
     Post.findById = function (id) {
         return this.createQueryBuilder("post")
-            .where("post.id = :id", { id: id })
+            .where("post.Id = :id", { id: id })
+            .getMany();
+    };
+    Post.findByCategory = function (category) {
+        return this.createQueryBuilder("post")
+            .where("post.Category = :category", { category: category })
             .getMany();
     };
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
     ], Post.prototype, "Id", void 0);
+    __decorate([
+        typeorm_1.Column({
+            nullable: true,
+        }),
+        __metadata("design:type", String)
+    ], Post.prototype, "ImagePath", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
@@ -58,14 +69,22 @@ var Post = /** @class */ (function (_super) {
         __metadata("design:type", Date)
     ], Post.prototype, "updatedAt", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return User_1.User; }, function (user) { return user.id; }),
-        typeorm_1.JoinColumn({ name: 'user_id ' }),
+        typeorm_1.ManyToOne(function () { return User_1.User; }, function (user) { return user.Id; }),
+        typeorm_1.JoinColumn({
+            name: 'user_id'
+        }),
         __metadata("design:type", User_1.User)
     ], Post.prototype, "userId", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", Date)
     ], Post.prototype, "Period", void 0);
+    __decorate([
+        typeorm_1.Column({
+            nullable: true,
+        }),
+        __metadata("design:type", String)
+    ], Post.prototype, "Category", void 0);
     Post = __decorate([
         typeorm_1.Entity()
     ], Post);
