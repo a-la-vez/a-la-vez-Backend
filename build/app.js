@@ -39,16 +39,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
+import "reflect-metadata";
 var express_1 = __importDefault(require("express"));
 var morgan_1 = __importDefault(require("morgan"));
 var path_1 = __importDefault(require("path"));
 var dotenv_1 = __importDefault(require("dotenv"));
-var typeorm_1 = require("typeorm");
+import { createConnection } from "typeorm";
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '.env') });
 var api_1 = __importDefault(require("./api"));
 var app = express_1.default();
-typeorm_1.createConnection().then(function (connection) { return __awaiter(void 0, void 0, void 0, function () {
+createConnection().then(function (connection) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         console.log("Hello");
         return [2 /*return*/];
