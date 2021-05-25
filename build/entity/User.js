@@ -42,6 +42,12 @@ var User = /** @class */ (function (_super) {
             .where("user.Email = :email", { email: email })
             .getOne();
     };
+    User.findRelationById = function (id) {
+        return this.createQueryBuilder("user")
+            .leftJoinAndSelect("user.post", "post")
+            .where('user.Id = :id', { id: id })
+            .getMany();
+    };
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)

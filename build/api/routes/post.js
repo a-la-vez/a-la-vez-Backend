@@ -41,12 +41,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var method_override_1 = __importDefault(require("method-override"));
+var multer_1 = __importDefault(require("multer"));
 var typeorm_1 = require("typeorm");
 var Post_1 = require("../../entity/Post");
+var storage = multer_1.default.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/PostsImages/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + "__" + file.originalname);
+    }
+});
+var uploadWithOriginFN = multer_1.default({ storage: storage });
 var route = express_1.Router();
 exports.default = (function (app) {
     app.use(method_override_1.default("_method"));
     app.use("/post", route);
+    //공고글 다 가져오기
     route.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var posts;
         return __generator(this, function (_a) {
@@ -54,12 +65,13 @@ exports.default = (function (app) {
                 case 0: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).find()];
                 case 1:
                     posts = _a.sent();
-                    res.send(posts);
+                    res.json(posts);
                     return [2 /*return*/];
             }
         });
     }); });
-    route.post("/write", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    //공고글 쓰기
+    route.post("/write", uploadWithOriginFN.array('files'), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, title, content, day, year, month, date, post;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -78,37 +90,84 @@ exports.default = (function (app) {
                     return [4 /*yield*/, post.save()];
                 case 1:
                     _b.sent();
-                    res.send("done?");
+                    res.json("post save");
                     return [2 /*return*/];
             }
         });
     }); });
-    //title만 업데이트 content만 업데이트 둘다 업데이트로 분할?
-    //경로 다르게 해서?
-    route.put("/update/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, title, content, post;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+    //제목 수정
+    route.put("/update/title/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var title, post;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = req.body, title = _a.title, content = _a.content;
+                    title = req.body.title;
                     return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
                 case 1:
-                    post = _b.sent();
+                    post = _a.sent();
                     if (!post) return [3 /*break*/, 3];
                     post.Title = title;
+                    return [4 /*yield*/, post.save()];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 4:
+                    post = _a.sent();
+                    res.json(post);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    //기간 수정
+    route.put("/update/period/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var period, post;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    period = req.body.period;
+                    return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 1:
+                    post = _a.sent();
+                    if (!post) return [3 /*break*/, 3];
+                    post.Period = period;
+                    return [4 /*yield*/, post.save()];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 4:
+                    post = _a.sent();
+                    res.json(post);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    //내용 수정
+    route.put("/update/content/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var content, post;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    content = req.body.content;
+                    return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 1:
+                    post = _a.sent();
+                    if (!post) return [3 /*break*/, 3];
                     post.Content = content;
                     return [4 /*yield*/, post.save()];
                 case 2:
-                    _b.sent();
-                    _b.label = 3;
+                    _a.sent();
+                    _a.label = 3;
                 case 3: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
                 case 4:
-                    post = _b.sent();
-                    res.send(post);
+                    post = _a.sent();
+                    res.json(post);
                     return [2 /*return*/];
             }
         });
     }); });
+    //삭제
     route.delete("/delete/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var post;
         return __generator(this, function (_a) {
@@ -116,7 +175,7 @@ exports.default = (function (app) {
                 case 0: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).delete(req.params.id)];
                 case 1:
                     post = _a.sent();
-                    res.send(post);
+                    res.json(post);
                     return [2 /*return*/];
             }
         });

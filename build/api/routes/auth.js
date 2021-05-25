@@ -44,6 +44,16 @@ var bcrypt_1 = __importDefault(require("bcrypt"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var email_1 = __importDefault(require("../../config/email"));
 var User_1 = require("../../entity/User");
+var multer_1 = __importDefault(require("multer"));
+var storage = multer_1.default.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/Profiles/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + "__" + file.originalname);
+    }
+});
+var uploadWithOriginFN = multer_1.default({ storage: storage });
 var generateRandom = function () {
     var ranNum = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
     return ranNum;
@@ -55,7 +65,7 @@ exports.default = (function (app) {
     // route.post("/authLogin", (req:Request, res:Response)=>{
     //     res.redirect("https://developer.dsmkr.com/external/login?redirect_url=http://localhost:3000&client_id=67e237be362c4885beb1d4429af365d1")
     // })
-    route.post("/join", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    route.post("/join", uploadWithOriginFN.single('file'), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, name, nick, email, password, re_password, hash, dbUser, user, mailOptions;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -65,13 +75,13 @@ exports.default = (function (app) {
                 case 1:
                     hash = _b.sent();
                     if (password != re_password) {
-                        return [2 /*return*/, res.json("password and re_password are diffirent")];
+                        return [2 /*return*/, res.status(400).json("password and re_password are diffirent")];
                     }
                     return [4 /*yield*/, User_1.User.findByEmail(email)];
                 case 2:
                     dbUser = _b.sent();
                     if (dbUser) {
-                        return [2 /*return*/, res.json("This email is already registered.")];
+                        return [2 /*return*/, res.status(400).json("This email is already registered.")];
                     }
                     user = {
                         name: name,
@@ -119,7 +129,7 @@ exports.default = (function (app) {
                 case 1:
                     _b.sent();
                     return [2 /*return*/, res.json("Ok")];
-                case 2: return [2 /*return*/, res.json("diffirent code")];
+                case 2: return [2 /*return*/, res.status(400).json("diffirent code")];
             }
         });
     }); });
@@ -147,17 +157,36 @@ exports.default = (function (app) {
                     }
                     return [3 /*break*/, 4];
                 case 3:
-                    res.json("not found");
+                    res.status(400).json("not found");
                     _b.label = 4;
                 case 4: return [2 /*return*/];
             }
         });
     }); });
-    route.post("/test", function (req, res) {
-        var user = req.body.user;
-        res.json(user);
+    route.post("/test", uploadWithOriginFN.single('file'), function (req, res) {
+        // const {name, nick, email, password, re_password} = req.body;
+        // const user = {
+        //     name,
+        //     nick,
+        //     email,
+        //     password,
+        // }
+        console.log(req.file.filename);
+        res.json("Ok");
     });
-    route.post("/:id", function () {
-    });
+    route.post("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, dbUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = Number(req.params.id);
+                    return [4 /*yield*/, User_1.User.findRelationById(id)];
+                case 1:
+                    dbUser = _a.sent();
+                    res.json(dbUser);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
 //# sourceMappingURL=auth.js.map

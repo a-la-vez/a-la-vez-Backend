@@ -38,4 +38,10 @@ export class Comment extends BaseEntity{
             .where("comment.id = :id", {id})
             .getMany();
     }
+
+    static findByPostID(id: number){
+        return this.createQueryBuilder("comment")
+            .where("comment.PostId = :id", {id})
+            .getMany();
+    }
 }

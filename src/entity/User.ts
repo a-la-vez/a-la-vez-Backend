@@ -8,9 +8,6 @@ export class User extends BaseEntity{
     Id: number;
 
     @Column()
-    Name: string;
-
-    @Column()
     Nick: string;
 
     @Column()
@@ -40,5 +37,13 @@ export class User extends BaseEntity{
         return this.createQueryBuilder("user")
             .where("user.Email = :email", {email})
             .getOne();
+    }
+
+    static findRelationById(id: number){
+        return this.createQueryBuilder("user")
+            .leftJoinAndSelect("user.post","post")
+            .where('user.Id = :id', {id})
+            .getMany();
+            
     }
 }

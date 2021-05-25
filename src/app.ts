@@ -16,8 +16,8 @@ createConnection().then(async connection => {
 }).catch(error => console.log(error));
 
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-
+console.log(__dirname);
+app.use('/public',express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
