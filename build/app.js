@@ -56,7 +56,7 @@ typeorm_1.createConnection().then(function (connection) { return __awaiter(void 
 }); }).catch(function (error) { return console.log(error); });
 app.set('port', process.env.PORT || 3000);
 console.log(__dirname);
-app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
+app.use('/public', express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use(morgan_1.default('dev'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));

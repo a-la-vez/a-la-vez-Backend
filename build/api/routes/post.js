@@ -42,11 +42,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var method_override_1 = __importDefault(require("method-override"));
 var multer_1 = __importDefault(require("multer"));
+var path_1 = __importDefault(require("path"));
+var jsonwebtoken_1 = require("jsonwebtoken");
 var typeorm_1 = require("typeorm");
 var Post_1 = require("../../entity/Post");
 var storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/PostsImages/');
+        cb(null, path_1.default.join(__dirname + '../../../public/Profiles/'));
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + "__" + file.originalname);
@@ -57,6 +59,7 @@ var route = express_1.Router();
 exports.default = (function (app) {
     app.use(method_override_1.default("_method"));
     app.use("/post", route);
+    //테스트 함
     //공고글 다 가져오기
     route.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var posts;
@@ -65,17 +68,24 @@ exports.default = (function (app) {
                 case 0: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).find()];
                 case 1:
                     posts = _a.sent();
-                    res.json(posts);
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.json(posts)];
             }
         });
     }); });
     //공고글 쓰기
-    route.post("/write", uploadWithOriginFN.array('files'), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, title, content, day, year, month, date, post;
+    route.post("/write", uploadWithOriginFN.single('file'), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var user, _a, title, content, day, year, month, date, post, e_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    user = "";
+                    if (req.headers.authorization && process.env.TOKEN_SECRET) {
+                        user = jsonwebtoken_1.verify(req.headers.authorization.substring(7), process.env.TOKEN_SECRET);
+                    }
+                    else {
+                        return [2 /*return*/, res.status(400).json("No Token")];
+                    }
                     _a = req.body, title = _a.title, content = _a.content;
                     day = new Date();
                     year = day.getFullYear();
@@ -85,88 +95,113 @@ exports.default = (function (app) {
                     post.Title = title;
                     post.Content = content;
                     post.Period = new Date("2022-04-19");
+                    post.ImagePath = "/public/PostsImages/" + req.file.filename;
+                    post.userId = user.id;
                     post.createdAt = new Date(year + "-" + month + "-" + date);
                     post.updatedAt = new Date(year + "-" + month + "-" + date);
                     return [4 /*yield*/, post.save()];
                 case 1:
                     _b.sent();
-                    res.json("post save");
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.json("post save")];
+                case 2:
+                    e_1 = _b.sent();
+                    console.error(e_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     }); });
+    //테스트 함
     //제목 수정
-    route.put("/update/title/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var title, post;
+    route.patch("/update/title/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var title, day, year, month, date, post;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     title = req.body.title;
+                    day = new Date();
+                    year = day.getFullYear();
+                    month = day.getMonth() + 1;
+                    date = day.getDate();
                     return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
                 case 1:
                     post = _a.sent();
                     if (!post) return [3 /*break*/, 3];
                     post.Title = title;
+                    post.updatedAt = new Date(year + "-" + month + "-" + date);
                     return [4 /*yield*/, post.save()];
                 case 2:
                     _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
-                case 4:
+                    return [3 /*break*/, 4];
+                case 3: return [2 /*return*/, res.status(400).json("can't find")];
+                case 4: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 5:
                     post = _a.sent();
-                    res.json(post);
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.json({ "updated": post })];
             }
         });
     }); });
+    //테스트 함
     //기간 수정
-    route.put("/update/period/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var period, post;
+    route.patch("/update/period/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var period, day, year, month, date, post;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     period = req.body.period;
+                    day = new Date();
+                    year = day.getFullYear();
+                    month = day.getMonth() + 1;
+                    date = day.getDate();
                     return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
                 case 1:
                     post = _a.sent();
                     if (!post) return [3 /*break*/, 3];
-                    post.Period = period;
+                    post.Period = new Date(period);
+                    post.updatedAt = new Date(year + "-" + month + "-" + date);
                     return [4 /*yield*/, post.save()];
                 case 2:
                     _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
-                case 4:
+                    return [3 /*break*/, 4];
+                case 3: return [2 /*return*/, res.status(400).json("can't find")];
+                case 4: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 5:
                     post = _a.sent();
-                    res.json(post);
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.json({ "updated": post })];
             }
         });
     }); });
+    //테스트 함
     //내용 수정
-    route.put("/update/content/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var content, post;
+    route.patch("/update/content/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var content, day, year, month, date, post;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     content = req.body.content;
+                    day = new Date();
+                    year = day.getFullYear();
+                    month = day.getMonth() + 1;
+                    date = day.getDate();
                     return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
                 case 1:
                     post = _a.sent();
                     if (!post) return [3 /*break*/, 3];
                     post.Content = content;
+                    post.updatedAt = new Date(year + "-" + month + "-" + date);
                     return [4 /*yield*/, post.save()];
                 case 2:
                     _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
-                case 4:
+                    return [3 /*break*/, 4];
+                case 3: return [2 /*return*/, res.status(400).json("can't find")];
+                case 4: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 5:
                     post = _a.sent();
-                    res.json(post);
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.json({ "updated": post })];
             }
         });
     }); });
+    //테스트 함
     //삭제
     route.delete("/delete/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var post;
@@ -175,8 +210,26 @@ exports.default = (function (app) {
                 case 0: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).delete(req.params.id)];
                 case 1:
                     post = _a.sent();
-                    res.json(post);
-                    return [2 /*return*/];
+                    if (post) {
+                        return [2 /*return*/, res.json("deleted")];
+                    }
+                    return [2 /*return*/, res.status(400).json("can't find")];
+            }
+        });
+    }); });
+    //테스트 함
+    //공고글 한 개 자세히 보기
+    route.post("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var post;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, typeorm_1.getRepository(Post_1.Post).findOne(req.params.id)];
+                case 1:
+                    post = _a.sent();
+                    if (post) {
+                        return [2 /*return*/, res.json(post)];
+                    }
+                    return [2 /*return*/, res.status(400).json("can't find")];
             }
         });
     }); });

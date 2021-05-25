@@ -38,6 +38,11 @@ var Comment = /** @class */ (function (_super) {
             .where("comment.id = :id", { id: id })
             .getMany();
     };
+    Comment.findByPostID = function (id) {
+        return this.createQueryBuilder("comment")
+            .where("comment.PostId = :id", { id: id })
+            .getMany();
+    };
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)

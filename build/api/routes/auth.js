@@ -45,9 +45,10 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var email_1 = __importDefault(require("../../config/email"));
 var User_1 = require("../../entity/User");
 var multer_1 = __importDefault(require("multer"));
+var path_1 = __importDefault(require("path"));
 var storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/Profiles/');
+        cb(null, path_1.default.join(__dirname + '../../../public/PostsImages/'));
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + "__" + file.originalname);
@@ -65,12 +66,13 @@ exports.default = (function (app) {
     // route.post("/authLogin", (req:Request, res:Response)=>{
     //     res.redirect("https://developer.dsmkr.com/external/login?redirect_url=http://localhost:3000&client_id=67e237be362c4885beb1d4429af365d1")
     // })
+    //테스트 해봄
     route.post("/join", uploadWithOriginFN.single('file'), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, name, nick, email, password, re_password, hash, dbUser, user, mailOptions;
+        var _a, nick, email, password, re_password, hash, dbUser, user, mailOptions;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = req.body, name = _a.name, nick = _a.nick, email = _a.email, password = _a.password, re_password = _a.re_password;
+                    _a = req.body, nick = _a.nick, email = _a.email, password = _a.password, re_password = _a.re_password;
                     return [4 /*yield*/, bcrypt_1.default.hash(password, 12)];
                 case 1:
                     hash = _b.sent();
@@ -84,10 +86,10 @@ exports.default = (function (app) {
                         return [2 /*return*/, res.status(400).json("This email is already registered.")];
                     }
                     user = {
-                        name: name,
                         email: email,
                         nick: nick,
                         password: hash,
+                        imagePath: "/public/Profiles/" + req.file.filename
                     };
                     if (typeof email == 'string') {
                         mailOptions = {
@@ -113,6 +115,7 @@ exports.default = (function (app) {
             }
         });
     }); });
+    //테스트 해봄
     route.post('/code', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, code, user, newUser;
         return __generator(this, function (_b) {
@@ -121,10 +124,10 @@ exports.default = (function (app) {
                     _a = req.body, code = _a.code, user = _a.user;
                     if (!(code == rancode)) return [3 /*break*/, 2];
                     newUser = new User_1.User();
-                    newUser.Name = user.name;
                     newUser.Nick = user.nick;
                     newUser.Email = user.email;
                     newUser.Password = user.password;
+                    newUser.ImagePath = user.imagePath;
                     return [4 /*yield*/, newUser.save()];
                 case 1:
                     _b.sent();
@@ -133,6 +136,7 @@ exports.default = (function (app) {
             }
         });
     }); });
+    //테스트 해봄
     route.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, email, password, dbUser, user, token;
         return __generator(this, function (_b) {
@@ -148,11 +152,10 @@ exports.default = (function (app) {
                     if (_b.sent()) {
                         user = {
                             id: dbUser.Id,
-                            name: dbUser.Name,
                             nick: dbUser.Nick,
                             email: dbUser.Email
                         };
-                        token = jsonwebtoken_1.default.sign(user, process.env.TOKEN_SECRET, { expiresIn: '10m', issuer: 'admin' });
+                        token = jsonwebtoken_1.default.sign(user, process.env.TOKEN_SECRET, { issuer: 'admin' });
                         res.json(token);
                     }
                     return [3 /*break*/, 4];
@@ -164,17 +167,39 @@ exports.default = (function (app) {
         });
     }); });
     route.post("/test", uploadWithOriginFN.single('file'), function (req, res) {
-        // const {name, nick, email, password, re_password} = req.body;
-        // const user = {
-        //     name,
-        //     nick,
-        //     email,
-        //     password,
-        // }
+        var _a = req.body, name = _a.name, nick = _a.nick, email = _a.email, password = _a.password, re_password = _a.re_password;
+        // const image = fs.readFileSync(path.join(__dirname + '../../../public/Profiles/'+req.file.filename))
+        // const test = new Buffer(image).toString('base64');//base64 문자열로 변환
+        var user = {
+            name: name,
+            nick: nick,
+            email: email,
+            password: password,
+            url: "/public/Profiles/" + req.file.filename
+        };
         console.log(req.file.filename);
-        res.json("Ok");
+        res.json(user);
     });
-    route.post("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    route.get("/user/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, dbUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = Number(req.params.id);
+                    return [4 /*yield*/, User_1.User.findById(id)];
+                case 1:
+                    dbUser = _a.sent();
+                    if (dbUser) {
+                        return [2 /*return*/, res.json(dbUser)];
+                    }
+                    else {
+                        return [2 /*return*/, res.status(400).json("can't find")];
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    route.get("/userAndrelation/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var id, dbUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -183,7 +208,12 @@ exports.default = (function (app) {
                     return [4 /*yield*/, User_1.User.findRelationById(id)];
                 case 1:
                     dbUser = _a.sent();
-                    res.json(dbUser);
+                    if (dbUser) {
+                        return [2 /*return*/, res.json(dbUser)];
+                    }
+                    else {
+                        return [2 /*return*/, res.status(400).json("can't find")];
+                    }
                     return [2 /*return*/];
             }
         });

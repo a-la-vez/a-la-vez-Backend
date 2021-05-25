@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import express, {Request, Response, NextFunction} from 'express';
+import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';

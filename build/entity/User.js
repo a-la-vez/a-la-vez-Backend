@@ -55,10 +55,6 @@ var User = /** @class */ (function (_super) {
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], User.prototype, "Name", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
     ], User.prototype, "Nick", void 0);
     __decorate([
         typeorm_1.Column(),
