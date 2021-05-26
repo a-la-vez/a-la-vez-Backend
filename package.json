@@ -3,9 +3,10 @@
    "version": "0.0.1",
    "description": "project",
    "main": "build/index.js",
+   "private":"true",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "npx tsc && node build/app.js"
+      "start": "ts-node src/app.ts"
    }, 
    "author": "",
    "license": "ISC",
