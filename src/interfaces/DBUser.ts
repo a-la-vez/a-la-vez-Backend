@@ -3,4 +3,4 @@ export interface DBUser{
 	Nick:string;
 	Email:string;
 	ImagePath:string;
-}
+} 

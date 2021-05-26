@@ -54,4 +54,4 @@ export class Post extends BaseEntity{
             .where("post.Category = :category", {category})
             .getMany();
     }
-}
+} 

@@ -8,4 +8,4 @@ export default (app:Router)=>{
     route.get("/", (req: Request, res: Response)=>{
         res.sendFile(path.resolve('src/html/index.html'));
     })
-}
+} 

@@ -43,4 +43,4 @@ export class Comment extends BaseEntity{
             .where("comment.PostId = :id", {id})
             .getMany();
     }
-}
+} 
