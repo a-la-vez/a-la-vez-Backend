@@ -6,7 +6,7 @@
    "password": "82c08380",
    "database": "heroku_105ede0d8431926",
    "synchronize": true,
-   "logging": true,
+   "logging": false,
    "entities": [
       "src/entity/**/*.ts"
    ],

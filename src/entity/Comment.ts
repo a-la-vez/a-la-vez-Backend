@@ -1,5 +1,4 @@
 import {Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn} from "typeorm";
-
 import { Post } from './Post'
 import { User } from './User'
 
