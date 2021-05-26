@@ -2,9 +2,9 @@
    "type": "mysql",
    "host": "us-cdbr-east-03.cleardb.com",
    "port": 3306,
-   "username": "b69ae8a46a5023",
-   "password": "82c08380",
-   "database": "heroku_105ede0d8431926",
+   "username": "b8f0f34a275b0b",
+   "password": "379d82b1",
+   "database": "heroku_c9486ee8337d5e1",
    "synchronize": true,
    "logging": false,
    "entities": [
