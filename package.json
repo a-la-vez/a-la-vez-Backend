@@ -3,11 +3,11 @@
    "version": "0.0.1",
    "description": "project",
    "main": "build/index.js",
-   "private":true,
+   "private": true,
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "ts-node src/app.ts"
-   }, 
+   },
    "author": "",
    "license": "ISC",
    "dependencies": {
@@ -21,7 +21,6 @@
       "@types/mysql": "^2.15.18",
       "@types/nodemailer": "^6.4.2",
       "@types/nodemailer-direct-transport": "^1.0.31",
-      "@types/nodemailer-smtp-transport": "^2.7.4",
       "@types/request": "^2.48.5",
       "bcrypt": "^5.0.1",
       "dotenv": "^10.0.0",
@@ -32,7 +31,6 @@
       "multer": "^1.4.2",
       "mysql": "^2.18.1",
       "nodemailer": "^6.6.1",
-      "nodemailer-smtp-transport": "^2.7.4",
       "reflect-metadata": "^0.1.13",
       "request": "^2.88.2",
       "typeorm": "0.2.32"
