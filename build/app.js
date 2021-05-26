@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
+// import "reflect-metadata";
 var express_1 = __importDefault(require("express"));
 var morgan_1 = __importDefault(require("morgan"));
 var path_1 = __importDefault(require("path"));
@@ -54,8 +54,30 @@ typeorm_1.createConnection().then(function (connection) { return __awaiter(void 
         return [2 /*return*/];
     });
 }); }).catch(function (error) { return console.log(error); });
+// createConnection().then(async connection => {
+//     console.log("Hello");
+// }).catch(error => {
+//     console.log("have error");
+//     getConnectionOptions("main").then(option=>{
+//         const connect = new Connection(option)
+//         connect.connect();
+//         console.log(connect.isConnected);
+//     })
+//     if(error.code == 'PROTOCOL_CONNECTION_LOST'){
+//         console.log("PROTOCOL_CONNECTION_LOST");
+//     }else{
+//         throw error;
+//     }
+// });
+// process.on('unhandledRejection', listener => {
+//     if (listener!.toString().match(/ECONNREFUSED/) ||
+//         listener!.toString().match(/Connection is not established/)) {
+//         logger(`Connection to ${bold(target_database.database)} has been lost. Retry to connect ...`, _PRIORITY.CRITICAL, null, _MODULE.MAIN);
+//         conn?.close()
+//         conn?.connect()
+//     }
+// })
 app.set('port', process.env.PORT || 3000);
-console.log(__dirname);
 app.use('/public', express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use(morgan_1.default('dev'));
 app.use(express_1.default.json());
