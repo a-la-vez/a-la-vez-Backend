@@ -4,10 +4,10 @@ import jwt from "jsonwebtoken";
 import Transport from "../../config/email";
 import { User } from "../../entity/User";
 import { IUser } from "../../interfaces/IUser";
-import multer from "multer";
+import multer, {diskStorage} from "multer";
 import path from "path";
 
-const storage = multer.diskStorage({
+const storage = diskStorage({
     destination(req, file, cb){
         cb(null, path.join(__dirname + '../../../public/PostsImages/'));
     },
@@ -16,7 +16,6 @@ const storage = multer.diskStorage({
     }
 });
 const uploadWithOriginFN = multer({storage: storage});
-
 const generateRandom = () => {
     var ranNum = Math.floor(Math.random()*(999999-111111+1)) + 111111;
     return ranNum;
