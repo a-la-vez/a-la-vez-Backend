@@ -4,8 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var nodemailer_1 = __importDefault(require("nodemailer"));
-var nodemailer_smtp_transport_1 = __importDefault(require("nodemailer-smtp-transport"));
-var Transport = nodemailer_1.default.createTransport(nodemailer_smtp_transport_1.default({
+var Transport = nodemailer_1.default.createTransport({
     service: "GMAIL",
     host: "smtp.gmail.com",
     auth: {
@@ -15,6 +14,6 @@ var Transport = nodemailer_1.default.createTransport(nodemailer_smtp_transport_1
     tls: {
         rejectUnauthorized: false
     }
-}));
+});
 exports.default = Transport;
 //# sourceMappingURL=email.js.map
