@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';
 import { createConnection } from "typeorm";
-dotenv.config({path: path.join(__dirname, '.env')});
+// dotenv.config({path: path.join(__dirname, '.env')});
 import router from "./api";
 
 const app: express.Application = express();
