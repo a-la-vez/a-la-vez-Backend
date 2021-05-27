@@ -1,19 +1,16 @@
 {
    "compilerOptions": {
-      "lib": [
-         "es5",
-         "es6"
-      ],
-      "target": "es5",
-      "moduleResolution": "node",
-      "outDir": "./build",
-      "strict": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "sourceMap": true,
-      "strictPropertyInitialization": false,
-      "esModuleInterop": true
-   },
-   "include": ["src/**/*.ts"],
-   "exclude": ["./build"]
-} 
+     "module": "commonjs",
+     "declaration": true,
+     "removeComments": true,
+     "emitDecoratorMetadata": true,
+     "experimentalDecorators": true,
+     "allowSyntheticDefaultImports": true,
+     "target": "es2017",
+     "sourceMap": true,
+     "outDir": "./dist",
+     "baseUrl": "./",
+     "incremental": true
+   }
+ }
+ 

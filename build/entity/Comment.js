@@ -1,4 +1,7 @@
 "use strict";
+// import {Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn} from "typeorm";
+// import { Post } from './Post'
+// import { User } from './User'
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -23,9 +26,45 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Comment = void 0;
-var typeorm_1 = require("typeorm");
+// @Entity()
+// export class Comment extends BaseEntity{
+//     @PrimaryGeneratedColumn()
+//     Id: number;
+//     @Column()
+//     Content: string;
+//     @ManyToOne(
+//         () => User,
+//         (user) => user.Id
+//     )
+//     @JoinColumn({ name: 'user_id'})
+//     userId: User;
+//     @ManyToOne(
+//         () => Post,
+//         (post) => post.Id
+//     )
+//     @JoinColumn({ name: 'post_id'})
+//     PostId: Post;
+//     @CreateDateColumn()
+//     createdAt: Date;
+//     @UpdateDateColumn()
+//     updatedAt: Date;
+//     static findById(id: number){
+//         return this.createQueryBuilder("comment")
+//             .where("comment.id = :id", {id})
+//             .getMany();
+//     }
+//     static findByPostID(id: number){
+//         return this.createQueryBuilder("comment")
+//             .where("comment.PostId = :id", {id})
+//             .getMany();
+//     }
+// } 
+var typeorm_1 = __importDefault(require("typeorm"));
 var Post_1 = require("./Post");
 var User_1 = require("./User");
 var Comment = /** @class */ (function (_super) {
@@ -44,35 +83,35 @@ var Comment = /** @class */ (function (_super) {
             .getMany();
     };
     __decorate([
-        typeorm_1.PrimaryGeneratedColumn(),
+        typeorm_1.default.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
     ], Comment.prototype, "Id", void 0);
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.default.Column(),
         __metadata("design:type", String)
     ], Comment.prototype, "Content", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function () { return User_1.User; }, function (user) { return user.Id; }),
-        typeorm_1.JoinColumn({ name: 'user_id' }),
+        typeorm_1.default.ManyToOne(function () { return User_1.User; }, function (user) { return user.Id; }),
+        typeorm_1.default.JoinColumn({ name: 'user_id' }),
         __metadata("design:type", User_1.User)
     ], Comment.prototype, "userId", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function () { return Post_1.Post; }, function (post) { return post.Id; }),
-        typeorm_1.JoinColumn({ name: 'post_id' }),
+        typeorm_1.default.ManyToOne(function () { return Post_1.Post; }, function (post) { return post.Id; }),
+        typeorm_1.default.JoinColumn({ name: 'post_id' }),
         __metadata("design:type", Post_1.Post)
     ], Comment.prototype, "PostId", void 0);
     __decorate([
-        typeorm_1.CreateDateColumn(),
+        typeorm_1.default.CreateDateColumn(),
         __metadata("design:type", Date)
     ], Comment.prototype, "createdAt", void 0);
     __decorate([
-        typeorm_1.UpdateDateColumn(),
+        typeorm_1.default.UpdateDateColumn(),
         __metadata("design:type", Date)
     ], Comment.prototype, "updatedAt", void 0);
     Comment = __decorate([
-        typeorm_1.Entity()
+        typeorm_1.default.Entity()
     ], Comment);
     return Comment;
-}(typeorm_1.BaseEntity));
+}(typeorm_1.default.BaseEntity));
 exports.Comment = Comment;
 //# sourceMappingURL=Comment.js.map

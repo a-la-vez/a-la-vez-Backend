@@ -4,7 +4,6 @@
    "description": "project",
    "main": "build/index.js",
    "private": true,
-   "type": "module",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "node build/app.js"
