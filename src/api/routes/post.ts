@@ -1,6 +1,6 @@
 import {Router, Request, Response, NextFunction} from "express";
-import methodOverride from "method-override";
-import multer from "multer";
+import methodOverride = require("method-override");
+import multer = require("multer");
 import path from "path";
 import {verify} from "jsonwebtoken";
 import { getRepository } from "typeorm";
@@ -8,12 +8,12 @@ import { Post } from "../../entity/Post";
 
 const storage = multer.diskStorage({
     destination(req, file, cb){
-        cb(null,  path.join(__dirname + '../../../public/Profiles/'));
+        cb(null, path.join(__dirname + '../../../public/Profiles/'));
     },
     filename(req,file,cb){
         cb(null, `${Date.now()}__${file.originalname}`);
     }
-});
+})
 const uploadWithOriginFN = multer({storage: storage});
 
 const route = Router();
@@ -30,7 +30,7 @@ export default (app: Router) => {
     });
 
     //공고글 쓰기
-    route.post("/write", uploadWithOriginFN.single('file'), async (req:Request, res:Response)=>{
+    route.post("/write", async (req:Request, res:Response)=>{
         try{
             let user:any = "";
             if(req.headers.authorization && process.env.TOKEN_SECRET){
@@ -49,7 +49,7 @@ export default (app: Router) => {
             post.Title = title;
             post.Content = content;
             post.Period = new Date("2022-04-19");
-            post.ImagePath = `/public/PostsImages/${req.file.filename}`
+            // post.ImagePath = `/public/PostsImages/${req.file.filename}`
             post.userId = user.id;
             post.createdAt = new Date(`${year}-${month}-${date}`);
             post.updatedAt = new Date(`${year}-${month}-${date}`);

@@ -1,4 +1,5 @@
 import {Router, Request, Response, NextFunction} from "express"
+import methodOverride = require("method-override");
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Comment } from "../../entity/Comment";
@@ -7,6 +8,7 @@ import { Post } from "../../entity/Post";
 const route = Router();
 
 export default (app:Router)=>{
+    app.use(methodOverride("_method"));
     app.use("/comment", route);
 
     route.get("/findAll/:id", async (req:Request, res:Response)=>{

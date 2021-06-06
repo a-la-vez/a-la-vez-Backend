@@ -1,20 +1,21 @@
 import {Router, Request, Response, NextFunction} from "express";
+import methodOverride = require("method-override");
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Transport from "../../config/email";
 import { User } from "../../entity/User";
 import { IUser } from "../../interfaces/IUser";
-import multer, {diskStorage} from "multer";
+import multer = require("multer")
 import path from "path";
 
-const storage = diskStorage({
+const storage = multer.diskStorage({
     destination(req, file, cb){
         cb(null, path.join(__dirname + '../../../public/PostsImages/'));
     },
     filename(req,file,cb){
         cb(null, `${Date.now()}__${file.originalname}`);
     }
-});
+})
 const uploadWithOriginFN = multer({storage: storage});
 const generateRandom = () => {
     var ranNum = Math.floor(Math.random()*(999999-111111+1)) + 111111;
@@ -25,6 +26,7 @@ const rancode = generateRandom();
 const route = Router();
 
 export default (app: Router) => {
+    app.use(methodOverride("_method"));
     app.use('/auth', route);
 
     // route.post("/authLogin", (req:Request, res:Response)=>{
