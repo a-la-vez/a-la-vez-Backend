@@ -1,12 +1,11 @@
-import "reflect-metadata";
+// import "reflect-metadata";
+require('dotenv').config();
 import express = require("express");
 import morgan = require("morgan")
 import path = require("path");
 import { createConnection } from "typeorm";
 // dotenv.config({path: path.join(__dirname, '.env')});
 import router from "./api";
-
-require('dotenv').config();
 
 const app: express.Application = express();
 

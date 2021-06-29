@@ -39,20 +39,21 @@ export default (app: Router) => {
             else{
                 return res.status(400).json("No Token");
             }
-            const {title, content} = req.body;
-            const day = new Date();
-            const year = day.getFullYear();
-            const month = day.getMonth()+1;
-            const date = day.getDate();
+            const {title, content, personnel} = req.body;
+            // const day = new Date();
+            // const year = day.getFullYear();
+            // const month = day.getMonth()+1;
+            // const date = day.getDate();
 
             const post = new Post();
             post.Title = title;
             post.Content = content;
             post.Period = new Date("2022-04-19");
+            post.Personnel = personnel;
             // post.ImagePath = `/public/PostsImages/${req.file.filename}`
             post.userId = user.id;
-            post.createdAt = new Date(`${year}-${month}-${date}`);
-            post.updatedAt = new Date(`${year}-${month}-${date}`);
+            // post.createdAt = new Date(`${year}-${month}-${date}`);
+            // post.updatedAt = new Date(`${year}-${month}-${date}`);
             await post.save();
             return res.json("post save");
         }catch(e){
@@ -60,19 +61,18 @@ export default (app: Router) => {
         }
     });
     
-    //테스트 함
     //제목 수정
     route.patch("/update/title/:id", async (req:Request, res:Response)=>{
         const { title } = req.body;
-        const day = new Date();
-        const year = day.getFullYear();
-        const month = day.getMonth()+1;
-        const date = day.getDate();
+        // const day = new Date();
+        // const year = day.getFullYear();
+        // const month = day.getMonth()+1;
+        // const date = day.getDate();
 
         let post: Post|undefined = await getRepository(Post).findOne(req.params.id);
         if(post){
             post.Title = title;
-            post.updatedAt = new Date(`${year}-${month}-${date}`);
+            // post.updatedAt = new Date(`${year}-${month}-${date}`);
             await post.save();
         }
         else{
@@ -82,19 +82,18 @@ export default (app: Router) => {
         return res.json({"updated":post});
     });
 
-    //테스트 함
     //기간 수정
     route.patch("/update/period/:id", async (req:Request, res:Response)=>{
         const { period } = req.body;
-        const day = new Date();
-        const year = day.getFullYear();
-        const month = day.getMonth()+1;
-        const date = day.getDate();
+        // const day = new Date();
+        // const year = day.getFullYear();
+        // const month = day.getMonth()+1;
+        // const date = day.getDate();
 
         let post: Post|undefined = await getRepository(Post).findOne(req.params.id);
         if(post){
             post.Period = new Date(period);
-            post.updatedAt = new Date(`${year}-${month}-${date}`);
+            // post.updatedAt = new Date(`${year}-${month}-${date}`);
             await post.save();
         }
         else{
@@ -104,19 +103,18 @@ export default (app: Router) => {
         return res.json({"updated":post});
     });
 
-    //테스트 함
     //내용 수정
     route.patch("/update/content/:id", async (req:Request, res:Response)=>{
         const { content } = req.body;
-        const day = new Date();
-        const year = day.getFullYear();
-        const month = day.getMonth()+1;
-        const date = day.getDate();
+        // const day = new Date();
+        // const year = day.getFullYear();
+        // const month = day.getMonth()+1;
+        // const date = day.getDate();
 
         let post: Post|undefined = await getRepository(Post).findOne(req.params.id);
         if(post){
             post.Content = content;
-            post.updatedAt = new Date(`${year}-${month}-${date}`);
+            // post.updatedAt = new Date(`${year}-${month}-${date}`);
             await post.save();
         }
         else{

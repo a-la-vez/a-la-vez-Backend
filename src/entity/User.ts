@@ -5,27 +5,27 @@ import { Post } from "./Post";
 export class User extends BaseEntity{
 
     @PrimaryGeneratedColumn()
-    Id: number;
+    Id!: number;
 
     @Column()
-    Nick: string;
+    Nick!: string;
 
     @Column()
-    Email: string;
+    Email!: string;
 
     @Column()
-    Password: string;
+    Password!: string;
 
     @Column({
         nullable: true,
     })
-    ImagePath: string;
+    ImagePath!: string;
 
     @OneToMany(
         () => Post,
         (post)=>post.userId
     )
-    post: Post[];
+    post!: Post[];
     
     static findById(id: number){
         return this.createQueryBuilder("user")

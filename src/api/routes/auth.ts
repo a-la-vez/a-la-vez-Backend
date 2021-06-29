@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 import Transport from "../../config/email";
 import { User } from "../../entity/User";
 import { IUser } from "../../interfaces/IUser";
-import multer = require("multer")
-import path from "path";
+import multer = require("multer");
+import path = require("path");
 
 const storage = multer.diskStorage({
     destination(req, file, cb){
@@ -34,7 +34,7 @@ export default (app: Router) => {
     // })
     
     //테스트 해봄
-    route.post("/join", uploadWithOriginFN.single('file'), async (req:Request, res:Response)=>{
+    route.post("/join", async (req:Request, res:Response)=>{
         const {nick, email, password, re_password} = req.body;
         const hash = await bcrypt.hash(password, 12);
 
@@ -52,7 +52,9 @@ export default (app: Router) => {
             email,
             nick,
             password: hash,
-            imagePath: `/public/Profiles/${req.file.filename}`
+            imagePath: "",
+            code: rancode
+            // imagePath: req.file.filename
         };
         
         if(typeof email == 'string'){
@@ -80,7 +82,7 @@ export default (app: Router) => {
     route.post('/code', async (req:Request, res:Response)=>{
         const { code, user } = req.body;
 
-        if(code == rancode){
+        if(user.code == code){
             const newUser = new User();
             newUser.Nick = user.nick;
             newUser.Email = user.email;

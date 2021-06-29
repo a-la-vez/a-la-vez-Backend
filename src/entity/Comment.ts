@@ -6,31 +6,31 @@ import { User } from './User'
 export class Comment extends BaseEntity{
 
     @PrimaryGeneratedColumn()
-    Id: number;
+    Id!: number;
 
     @Column()
-    Content: string;
+    Content!: string;
 
     @ManyToOne(
         () => User,
         (user) => user.Id
     )
     @JoinColumn({ name: 'user_id'})
-    userId: User;
+    userId!: User;
 
     @ManyToOne(
         () => Post,
         (post) => post.Id
     )
     @JoinColumn({ name: 'post_id'})
-    PostId: Post;
+    PostId!: Post;
 
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt!: Date;
 
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updatedAt!: Date;
 
     static findById(id: number){
         return this.createQueryBuilder("comment")
