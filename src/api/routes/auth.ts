@@ -33,7 +33,6 @@ export default (app: Router) => {
     //     res.redirect("https://developer.dsmkr.com/external/login?redirect_url=http://localhost:3000&client_id=67e237be362c4885beb1d4429af365d1")
     // })
     
-    //테스트 해봄
     route.post("/join", async (req:Request, res:Response)=>{
         const {nick, email, password, re_password} = req.body;
         const hash = await bcrypt.hash(password, 12);
@@ -78,7 +77,7 @@ export default (app: Router) => {
             });
         }
     });
-    //테스트 해봄
+    
     route.post('/code', async (req:Request, res:Response)=>{
         const { code, user } = req.body;
 
@@ -95,7 +94,7 @@ export default (app: Router) => {
             return res.status(400).json("diffirent code");
         }
     });
-    //테스트 해봄
+
     route.post("/login", async (req:Request, res:Response)=>{
         const { email, password } = req.body;
 
