@@ -1,4 +1,6 @@
-import {Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn} from "typeorm";
+import {Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany} from "typeorm";
+import { Application } from "./Application";
+import { Heart } from "./Heart";
 import { User } from './User'
 
 @Entity()
@@ -18,6 +20,7 @@ export class Post extends BaseEntity{
     @Column()
     Content!: string;
 
+    //인원
     @Column()
     Personnel!: number;
 
@@ -45,6 +48,18 @@ export class Post extends BaseEntity{
         nullable: true,
     })
     Category!: string;
+
+    @OneToMany(
+        () => Heart,
+        (heart)=>heart.userId
+    )
+    heart!: Heart[];
+
+    @OneToMany(
+        () => Application,
+        (application)=>application.userId
+    )
+    application!: Heart[];
 
     static findById(id: number){
         return this.createQueryBuilder("post")

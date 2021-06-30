@@ -1,5 +1,7 @@
 import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
 import { Post } from "./Post";
+import { Heart } from "./Heart";
+import { Application } from "./Application";
 
 @Entity()
 export class User extends BaseEntity{
@@ -26,6 +28,18 @@ export class User extends BaseEntity{
         (post)=>post.userId
     )
     post!: Post[];
+
+    @OneToMany(
+        () => Heart,
+        (heart)=>heart.userId
+    )
+    heart!: Heart[];
+
+    @OneToMany(
+        () => Application,
+        (application)=>application.userId
+    )
+    application!: Heart[];
     
     static findById(id: number){
         return this.createQueryBuilder("user")
