@@ -5,6 +5,7 @@ import path from "path";
 import {verify} from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Post } from "../../entity/Post";
+import { Heart } from "src/entity/Heart";
 
 const storage = multer.diskStorage({
     destination(req, file, cb){
@@ -140,6 +141,37 @@ export default (app: Router) => {
         const post = await getRepository(Post).findOne(req.params.id);
         if(post){
             return res.json(post);
+        }
+        return res.status(400).json("can't find");
+    });
+
+    route.post("/heart/:id", async(req:Request, res:Response)=>{
+        let user:any = "";
+        const post = await getRepository(Post).findOne(req.params.id);
+        if(req.headers.authorization && process.env.TOKEN_SECRET){
+            user = verify(req.headers.authorization.substring(7,),process.env.TOKEN_SECRET);
+        }
+        else{
+            return res.status(400).json("No Token");
+        }
+        
+        const heart = new Heart()
+        heart.userId = user.id;
+        if(post != undefined){
+            heart.postId = post;
+        }
+        else{
+            res.status(200).json("wrong post id");
+            return
+        }
+        await heart.save();
+        res.json("Heart pressed");
+    });
+
+    route.delete("/heart/:id", async(req:Request, res:Response)=>{
+        const heart = await getRepository(Heart).delete(req.params.id);
+        if(heart){
+            res.json("Heart Deleted");
         }
         return res.status(400).json("can't find");
     });
