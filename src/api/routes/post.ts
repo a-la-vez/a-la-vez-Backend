@@ -133,7 +133,9 @@ export default (app: Router) => {
         if(post){
             return res.json("deleted");
         }
-        return res.status(400).json("can't find");
+        else{
+            return res.status(400).json("can't find");
+        }
     });
 
     
@@ -143,7 +145,9 @@ export default (app: Router) => {
         if(post){
             return res.json(post);
         }
-        return res.status(400).json("can't find");
+        else{
+            return res.status(400).json("can't find");
+        }
     });
 
     route.post("/heart/:id", async(req:Request, res:Response)=>{
@@ -172,7 +176,7 @@ export default (app: Router) => {
     route.delete("/heart/:id", async(req:Request, res:Response)=>{
         const heart = await getRepository(Heart).delete(req.params.id);
         if(heart){
-            res.json("Heart Deleted");
+            return res.json("Heart Deleted");
         }
         return res.status(400).json("can't find");
     });
@@ -203,8 +207,23 @@ export default (app: Router) => {
     route.delete("/application/:id", async(req:Request, res:Response)=>{
         const heart = await getRepository(Heart).delete(req.params.id);
         if(heart){
-            res.json("Application Cancelled");
+            return res.json("Application Cancelled");
+        }
+        else{
+            return res.status(400).json("can't find");
+        }
+    });
+
+    route.get("/getApplicationList/:id", async(req:Request, res:Response)=>{
+        const applications = await getRepository(Application).find({
+            where:{
+                postId: req.params.id
+            }
+        })
+
+        if(applications){
+            return res.json(applications);
         }
         return res.status(400).json("can't find");
-    });
+    })
 } 
