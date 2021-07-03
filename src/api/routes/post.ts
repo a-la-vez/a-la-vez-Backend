@@ -181,6 +181,38 @@ export default (app: Router) => {
         return res.status(400).json("can't find");
     });
 
+    route.post("/application/:id/yes", async(req:Request, res:Response)=>{
+        const application = await getRepository(Application).findOne(req.params.id);
+        if(req.headers.authorization && process.env.TOKEN_SECRET){
+            let user = verify(req.headers.authorization.substring(7,),process.env.TOKEN_SECRET);
+        }
+        else{
+            return res.status(400).json("No Token");
+        }
+
+        if(application == undefined){
+            return res.status(200).json("wrong application id");
+        }
+        application.accep_status = "yes";
+        application.save();
+    });
+
+    route.post("/application/:id/no", async(req:Request, res:Response)=>{
+        const application = await getRepository(Application).findOne(req.params.id);
+        if(req.headers.authorization && process.env.TOKEN_SECRET){
+            let user = verify(req.headers.authorization.substring(7,),process.env.TOKEN_SECRET);
+        }
+        else{
+            return res.status(400).json("No Token");
+        }
+
+        if(application == undefined){
+            return res.status(200).json("wrong application id");
+        }
+        application.accep_status = "no";
+        application.save();
+    });
+
     route.post("/application/:id", async(req:Request, res:Response)=>{
         let user:any = "";
         const post = await getRepository(Post).findOne(req.params.id);
@@ -190,6 +222,7 @@ export default (app: Router) => {
         else{
             return res.status(400).json("No Token");
         }
+        const {name, phone_number, sentence} = req.body;
         
         const application = new Application()
         application.userId = user.id;
@@ -200,13 +233,16 @@ export default (app: Router) => {
             res.status(200).json("wrong post id");
             return
         }
+        application.name = name;
+        application.phone_number = phone_number;
+        application.sentence = sentence;
         await application.save();
         res.json("Applications Received");
     });
 
     route.delete("/application/:id", async(req:Request, res:Response)=>{
-        const heart = await getRepository(Heart).delete(req.params.id);
-        if(heart){
+        const application = await getRepository(Application).delete(req.params.id);
+        if(application){
             return res.json("Application Cancelled");
         }
         else{
@@ -226,4 +262,4 @@ export default (app: Router) => {
         }
         return res.status(400).json("can't find");
     })
-} 
+}
