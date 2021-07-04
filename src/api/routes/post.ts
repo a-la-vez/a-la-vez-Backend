@@ -150,6 +150,7 @@ export default (app: Router) => {
         }
     });
 
+    //하트 누름
     route.post("/heart/:id", async(req:Request, res:Response)=>{
         let user:any = "";
         const post = await getRepository(Post).findOne(req.params.id);
@@ -166,13 +167,14 @@ export default (app: Router) => {
             heart.postId = post;
         }
         else{
-            res.status(200).json("wrong post id");
+            res.status(400).json("wrong post id");
             return
         }
         await heart.save();
         res.json("Heart pressed");
     });
 
+    //하트 삭제
     route.delete("/heart/:id", async(req:Request, res:Response)=>{
         const heart = await getRepository(Heart).delete(req.params.id);
         if(heart){
@@ -181,7 +183,8 @@ export default (app: Router) => {
         return res.status(400).json("can't find");
     });
 
-    route.post("/application/:id/yes", async(req:Request, res:Response)=>{
+    //스터디 신청 수락
+    route.patch("/application/:id/yes", async(req:Request, res:Response)=>{
         const application = await getRepository(Application).findOne(req.params.id);
         if(req.headers.authorization && process.env.TOKEN_SECRET){
             let user = verify(req.headers.authorization.substring(7,),process.env.TOKEN_SECRET);
@@ -191,13 +194,15 @@ export default (app: Router) => {
         }
 
         if(application == undefined){
-            return res.status(200).json("wrong application id");
+            return res.status(400).json("wrong application id");
         }
         application.accep_status = "yes";
-        application.save();
+        await application.save();
+        res.json("State Saved");
     });
 
-    route.post("/application/:id/no", async(req:Request, res:Response)=>{
+    //스터디 신청 거절
+    route.patch("/application/:id/no", async(req:Request, res:Response)=>{
         const application = await getRepository(Application).findOne(req.params.id);
         if(req.headers.authorization && process.env.TOKEN_SECRET){
             let user = verify(req.headers.authorization.substring(7,),process.env.TOKEN_SECRET);
@@ -207,12 +212,14 @@ export default (app: Router) => {
         }
 
         if(application == undefined){
-            return res.status(200).json("wrong application id");
+            return res.status(400).json("wrong application id");
         }
         application.accep_status = "no";
-        application.save();
+        await application.save();
+        res.json("State Saved");
     });
 
+    //스터디 신청
     route.post("/application/:id", async(req:Request, res:Response)=>{
         let user:any = "";
         const post = await getRepository(Post).findOne(req.params.id);
@@ -230,7 +237,7 @@ export default (app: Router) => {
             application.postId = post;
         }
         else{
-            res.status(200).json("wrong post id");
+            res.status(400).json("wrong post id");
             return
         }
         application.name = name;
@@ -240,6 +247,7 @@ export default (app: Router) => {
         res.json("Applications Received");
     });
 
+    //스터디 신청 취소
     route.delete("/application/:id", async(req:Request, res:Response)=>{
         const application = await getRepository(Application).delete(req.params.id);
         if(application){
@@ -250,6 +258,8 @@ export default (app: Router) => {
         }
     });
 
+
+    //스터디 신청 목록
     route.get("/getApplicationList/:id", async(req:Request, res:Response)=>{
         const applications = await getRepository(Application).find({
             where:{
@@ -258,7 +268,7 @@ export default (app: Router) => {
         })
 
         if(applications){
-            return res.json(applications);
+            return res.json({'applications':applications});
         }
         return res.status(400).json("can't find");
     })
